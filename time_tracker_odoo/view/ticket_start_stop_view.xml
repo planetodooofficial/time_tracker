@@ -1,0 +1,72 @@
+<odoo>
+    <record id="ticket_start_stop_inherit_form2" model="ir.ui.view">
+        <field name="name">ticket.start.stop.inherit.form2</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position='after'>
+                <field name="state" widget="statusbar"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ticket_start_stop_inherited_form5" model="ir.ui.view">
+        <field name="name">ticket.start.stop.inherited.form5</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_assign_to_me']" position='after'>
+                <button name="start_ticket" string="Start Activity" class="btn-primary" type="object"  attrs="{'invisible':[('state','=','a2')]}"/>
+                <button name="stop_ticket" string="Stop Activity" class="btn-primary" type="object" attrs="{'invisible':[('state','=','a1')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ticket_start_stop_inherit_form1" model="ir.ui.view">
+        <field name="name">ticket.start.stop.inherit.form1</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='planned_hours']" position="after">
+                <field name="date_start" invisible="1"/>
+                <field name="date_stop" invisible="1"/>
+                <field name="active_timesheet" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='timesheet_ids']" position="attributes">
+                <attribute name ="attrs">{'readonly': [('active_timesheet', '=', True)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ticket_start_stop_inherit_tree1" model="ir.ui.view">
+        <field name="name">ticket.start.stop.inherit.tree1</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='timesheet_ids']//tree/field[@name='name']" position="after">
+
+                <field name="date_start" required="1"/>
+                <field name="date_stop" required="1"/>
+            </xpath>
+            <xpath expr="//field[@name='timesheet_ids']//tree/field[@name='unit_amount']" position="before">
+                <field name="account_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="button_project_task_kanban_view" model="ir.ui.view">
+        <field name="name">project.task.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='o_kanban_record_body']" position="inside">
+                <div>
+                    <field name="state" widget="statusbar" invisible="1"/>
+                    <button name="start_ticket" string="Start Activity" style="background-color:Green;" class="btn btn-primary btn-md" type="object" attrs="{'invisible':[('state','=','a2')]}">Start</button>
+                    <button name="stop_ticket" string="Stop Activity" style="background-color:Red;" class="btn btn-primary btn-md" type="object" attrs="{'invisible':[('state','=','a1')]}">End</button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
