@@ -10,8 +10,9 @@
             'security/ir.model.access.csv',
             'view/timesheet_wizard_view.xml',
             'view/ticket_start_stop_view.xml',
+            'view/project_timer_static.xml',
 
-                  ],
+    ],
     'images': [],
 
 

@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='stage_id']" position='after'>
-                <field name="state" widget="statusbar"/>
+                <field name="state" widget="statusbar" invisible="1"/>
             </xpath>
         </field>
     </record>
@@ -16,8 +16,13 @@
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_assign_to_me']" position='after'>
-                <button name="start_ticket" string="Start Activity" class="btn-primary" type="object"  attrs="{'invisible':[('state','=','a2')]}"/>
-                <button name="stop_ticket" string="Stop Activity" class="btn-primary" type="object" attrs="{'invisible':[('state','=','a1')]}"/>
+<!--                <button name="start_ticket" string="Start Activity" class="btn-primary" type="object"/>-->
+<!--                <button name="stop_ticket" string="Stop Activity" class="btn-primary" type="object"/>-->
+                <button name="timer_start" string="Start" type="object" attrs="{'invisible': ['|', ('active', '=', False), ('user_timer_status', 'in', ('Running', 'Paused'))]}" class="oe_inline oe_stat_button" icon="fa-play"/>
+                <button name="timer_resume" string="Resume" type="object" attrs="{'invisible': ['|', ('active', '=', False), ('user_timer_status', '!=', 'Paused')]}" class="oe_inline oe_stat_button" icon="fa-play-circle"/>
+                <button name="timer_pause" string="Pause" type="object" attrs="{'invisible': ['|', ('active', '=', False), ('user_timer_status', '!=', 'Running')]}" class="oe_inline oe_stat_button" icon="fa-pause"/>
+                <button name="timer_stop" string="Stop" type="object" attrs="{'invisible': ['|', ('active', '=', False), ('user_timer_status', 'in', ('Paused', 'Stopped'))]}" class="oe_stat_button oe_inline" icon="fa-stop"/>
+                <field name="user_timer_status" invisible="1"/>
             </xpath>
         </field>
     </record>
@@ -30,7 +35,15 @@
             <xpath expr="//field[@name='planned_hours']" position="after">
                 <field name="date_start" invisible="1"/>
                 <field name="date_stop" invisible="1"/>
+                <field name="user_timer_status" invisible="0"/>
                 <field name="active_timesheet" invisible="1"/>
+                <field name="is_user_working" invisible="0"/>
+                <label for="duration"/>
+                    <div>
+                        <button style="pointer-events: none;" class="oe_inline label label-default">
+                            <field name="duration" id="real_durationss" widget="timesheet_uoms" style="color: red;"/>
+                        </button>
+                    </div>
             </xpath>
             <xpath expr="//field[@name='timesheet_ids']" position="attributes">
                 <attribute name ="attrs">{'readonly': [('active_timesheet', '=', True)]}</attribute>
@@ -49,7 +62,9 @@
                 <field name="date_stop" required="1"/>
             </xpath>
             <xpath expr="//field[@name='timesheet_ids']//tree/field[@name='unit_amount']" position="before">
-                <field name="account_id"/>
+                <field name="account_id" invisible="1"/>
+                <field name="timer_status"/>
+                <field name="full_duration" invisible="0"/>
             </xpath>
         </field>
     </record>
@@ -62,8 +77,8 @@
             <xpath expr="//div[@class='o_kanban_record_body']" position="inside">
                 <div>
                     <field name="state" widget="statusbar" invisible="1"/>
-                    <button name="start_ticket" string="Start Activity" style="background-color:Green;" class="btn btn-primary btn-md" type="object" attrs="{'invisible':[('state','=','a2')]}">Start</button>
-                    <button name="stop_ticket" string="Stop Activity" style="background-color:Red;" class="btn btn-primary btn-md" type="object" attrs="{'invisible':[('state','=','a1')]}">End</button>
+<!--                    <button name="start_ticket" string="Start Activity" style="background-color:Green;" class="btn btn-primary btn-md" type="object">Start</button>-->
+<!--                    <button name="stop_ticket" string="Stop Activity" style="background-color:Red;" class="btn btn-primary btn-md" type="object" >End</button>-->
                 </div>
             </xpath>
         </field>
