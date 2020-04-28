@@ -1,9 +1,3 @@
-# Copyright 2016 Tecnativa - Antonio Espinosa
-# Copyright 2016 Tecnativa - Sergio Teruel
-# Copyright 2016-2018 Tecnativa - Pedro M. Baeza
-# Copyright 2019 Brainbean Apps (https://brainbeanapps.com)
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-
 from odoo import models, api,fields
 
 

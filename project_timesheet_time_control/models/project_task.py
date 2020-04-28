@@ -1,7 +1,5 @@
-# Copyright 2019 Tecnativa - Jairo Llopis
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-
-from odoo import api, models
+from odoo import api, models,_
+from odoo.exceptions import UserError
 
 
 class ProjectTask(models.Model):
@@ -23,8 +21,13 @@ class ProjectTask(models.Model):
         return result
 
     def button_start_work(self):
+        user=self.env.user
         result = super().button_start_work()
-        result["context"].update({
-            "default_project_id": self.project_id.id,
-        })
+        if self.user_id.id==user.id:
+            result["context"].update({
+                "default_project_id": self.project_id.id,
+            })
+        else:
+            raise UserError(_("This Task is assigned to different user")
+            )
         return result

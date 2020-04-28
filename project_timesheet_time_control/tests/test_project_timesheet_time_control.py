@@ -1,5 +1,3 @@
-# Copyright 2016-2018 Tecnativa - Pedro M. Baeza
-# License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0
 
 from odoo.tests import common
 from odoo import exceptions, fields

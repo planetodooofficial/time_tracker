@@ -1,7 +1,3 @@
-# Copyright 2016-2018 Tecnativa - Pedro M. Baeza
-# Copyright 2019 Brainbean Apps (https://brainbeanapps.com)
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 from odoo.tests import common
 
 

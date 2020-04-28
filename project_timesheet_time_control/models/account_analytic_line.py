@@ -1,8 +1,3 @@
-# Copyright 2016 Tecnativa - Antonio Espinosa
-# Copyright 2016 Tecnativa - Sergio Teruel
-# Copyright 2016-2018 Tecnativa - Pedro M. Baeza
-# License AGPL-3 - See http://www.gnu.org/licenses/agpl-3.0.html
-
 from datetime import datetime
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -21,6 +16,7 @@ class AccountAnalyticLine(models.Model):
         compute="_compute_show_time_control",
         help="Indicate which time control button to show, if any.",
     )
+    notes=fields.Text("Extra Notes")
 
     @api.model
     def _eval_date(self, vals):
@@ -86,4 +82,37 @@ class AccountAnalyticLine(models.Model):
                     line.id
                 )
             line.unit_amount = line._duration(line.date_time, end)
+            view = self.env.ref('project_timesheet_time_control.timesheet_wizard_form_view')
+            ctx = dict(self.env.context or {})
+            ctx.update({
+                'default_time_id': self.id,
+            })
+            return {
+                'name': _('Add Notes?'),
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'project.task.wizard',
+                'views': [(view.id, 'form')],
+                'view_id': view.id,
+                'target': 'new',
+                'context': ctx,
+            }
         return True
+
+
+class TaskWizard(models.TransientModel):
+
+    _name = 'project.task.wizard'
+
+    note=fields.Text("Task Description")
+    # task_id=fields.Many2one('project.task','Task')
+    time_id=fields.Many2one('account.analytic.line','Timesheet id')
+
+    def set_activity(self):
+        if self.time_id:
+            values = {'notes': self.note,}
+            self.time_id.write({'notes': self.note})
+
+    def cancel(self):
+        return {'type': 'ir.actions.act_window_close'}

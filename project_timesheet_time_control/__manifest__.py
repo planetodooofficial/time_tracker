@@ -1,11 +1,8 @@
 {
     'name': 'Project timesheet time control',
-    'version': '12.0.2.1.0',
-    'development_status': 'Mature',
+    'version': '13.1.0',
     'category': 'Project',
-    'author': 'Tecnativa,'
-              'Odoo Community Association (OCA)',
-    'maintainers': ['ernestotejeda'],
+    'author': 'Planet-odoo',
     'depends': [
         'hr_timesheet_task_stage',
         'hr_timesheet_task_domain',

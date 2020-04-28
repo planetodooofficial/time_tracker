@@ -1,5 +1,3 @@
-# Copyright 2019 Tecnativa - Jairo Llopis
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, models, fields
 from odoo.exceptions import UserError

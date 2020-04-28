@@ -1,5 +1,3 @@
-# Copyright 2019 Tecnativa - Jairo Llopis
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, models, fields
 from odoo.exceptions import UserError
@@ -9,6 +7,8 @@ class HrTimesheetSwitchs(models.Model):
     _inherit = "account.analytic.line"
 
     tag_ids = fields.Many2many('account.analytic.tag', 'account_analytic_line_tag_relss', 'line_idss', 'tag_idss', string='Tagss', copy=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
+    # current_time=fields.Many2one('hr.timesheet.switch', "Current Time")
+    # running_time=fields.Float('Running Time',related='current_time.running_timer_duration')
 
 
 class HrTimesheetSwitch(models.TransientModel):
@@ -17,8 +17,6 @@ class HrTimesheetSwitch(models.TransientModel):
     _description = "Helper to quickly switch between timesheet lines"
 
     tag_ids = fields.Many2many('account.analytic.tag', 'account_analytic_line_tag_rels', 'line_ids', 'tag_ids', string='Tagss', copy=True, domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]")
-
-
     running_timer_ids = fields.Many2one(
         comodel_name="account.analytic.line",
         string="Previous timer",
@@ -60,10 +58,7 @@ class HrTimesheetSwitch(models.TransientModel):
     def _compute_running_timer_duration(self):
         """Compute duration of running timer when stopped."""
         for one in self:
-            one.running_timer_duration = one._duration(
-                one.running_timer_ids.date_time,
-                one.date_time,
-            )
+            one.running_timer_duration = one._duration(one.running_timer_ids.date_time,one.date_time)
 
     @api.model
     def _closest_suggestion(self):
@@ -95,33 +90,33 @@ class HrTimesheetSwitch(models.TransientModel):
             limit=1,
         )
 
-    @api.model
-    def default_get(self, fields_list):
-        """Return defaults depending on the context where it is called."""
-        result = super().default_get(fields_list)
-        inherited = self._closest_suggestion()
-        assert inherited._name == "account.analytic.line"
-        # Inherit all possible fields from that account.analytic.line record
-        if inherited:
-            # Convert inherited to RPC-style values
-            _fields = set(fields_list) & set(inherited._fields) - {
-                # These fields must always be reset
-                "amount",
-                "date_time",
-                "date",
-                "`is_task_closed`",
-                "unit_amount",
-                # This field is from sale_timesheet, which is not among
-                # this module dependencies; ignoring it will let you
-                # resume an invoiced AAL if that module is installed,
-                # and it doesn't hurt here
-                "timesheet_invoice_id",
-            }
-            inherited.read(_fields)
-            values = inherited._convert_to_write(inherited._cache)
-            for field in _fields:
-                result[field] = values[field]
-        return result
+    # @api.model
+    # def default_get(self, fields_list):
+    #     """Return defaults depending on the context where it is called."""
+    #     result = super().default_get(fields_list)
+    #     inherited = self._closest_suggestion()
+    #     assert inherited._name == "account.analytic.line"
+    #     # Inherit all possible fields from that account.analytic.line record
+    #     if inherited:
+    #         # Convert inherited to RPC-style values
+    #         _fields = set(fields_list) & set(inherited._fields) - {
+    #             # These fields must always be reset
+    #             "amount",
+    #             "date_time",
+    #             "date",
+    #             "`is_task_closed`",
+    #             "unit_amount",
+    #             # This field is from sale_timesheet, which is not among
+    #             # this module dependencies; ignoring it will let you
+    #             # resume an invoiced AAL if that module is installed,
+    #             # and it doesn't hurt here
+    #             "timesheet_invoice_id",
+    #         }
+    #         inherited.read(_fields)
+    #         values = inherited._convert_to_write(inherited._cache)
+    #         for field in _fields:
+    #             result[field] = values[field]
+    #     return result
 
     def action_switch(self):
         """Stop old timer, start new one."""

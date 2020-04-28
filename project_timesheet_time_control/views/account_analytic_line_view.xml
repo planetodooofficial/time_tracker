@@ -10,6 +10,7 @@
             </field>
             <field name="date" position="after">
                 <field name="date_time" string="Date" required="1"/>
+                <field name="notes"/>
             </field>
             <field name="unit_amount" position="after">
                 <field name="show_time_control" invisible="1"/>
@@ -61,6 +62,7 @@
             </field>
             <field name="date" position="after">
                 <field name="date_time" string="Date" required="1"/>
+                <field name="notes"/>
             </field>
         </field>
     </record>
@@ -97,5 +99,34 @@
                 </xpath>
             </field>
     </record>
+
+
+        <record id="project_account_analytic_line" model="ir.ui.view">
+            <field name="name">account.analytic.line.project</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='timesheet_ids']//field[@name='unit_amount']" position="after">
+                        <field name="notes"/>
+                </xpath>
+            </field>
+    </record>
+
+     <record id="timesheet_wizard_form_view" model="ir.ui.view">
+            <field name="name">timesheet.wizard.form.view</field>
+            <field name="model">project.task.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Save Activity">
+                    <group>
+                        <field name="note" required="1"/>
+                        <field name="time_id" invisible="0"/>
+                    </group>
+                    <footer>
+                        <button name="set_activity" string="Save Notes" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
 
 </odoo>
