@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_timesheets">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-lg-12">
+                            <h2>
+                                <span>Timesheet Entries for the
+                                    <t t-esc="docs.name"/> Project
+                                </span>
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-lg-12">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th><span>Date</span></th>
+                                        <th><span>Responsible</span></th>
+                                        <th><span>Description</span></th>
+                                        <th t-if="show_project">Project</th>
+                                        <th t-if="show_task">Task</th>
+                                        <th class="text-right"><span>Time</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="docs" t-as="j">
+                                        <tr t-foreach="j.task_ids" t-as="k">
+                                            <tr t-foreach="k.timesheet_ids" t-as="l">
+                                                <td>
+                                                    <span t-field="l.date"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.user_id.partner_id.name"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.name" t-options="{'widget': 'text'}"/>
+                                                </td>
+                                                <td t-if="show_project">
+                                                    <span t-field="l.project_id.name"/>
+                                                </td>
+                                                <td t-if="show_task">
+                                                    <t t-if="l.task_id"><span t-field="l.task_id.name"/></t>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="l.unit_amount" t-options="{'widget': 'duration', 'digital': True, 'unit': 'hour', 'round': 'minute'}"/>
+                                                </td>
+                                            </tr>
+                                        </tr>
+                                    </tr>
+                                    <tr>
+                                        <td />
+                                        <td />
+                                        <td t-if="show_project"/>
+                                        <td t-if="show_task"/>
+<!--                                        <tr t-foreach="docs" t-as="j">-->
+<!--                                            <tr t-foreach="j.task_ids" t-as="k">-->
+<!--                                                <tr t-foreach="k.timesheet_ids" t-as="l">-->
+                                                    <td class="text-right"><strong>Total</strong></td>
+                                                    <td class="text-right"><strong t-esc="sum(l.unit_amount for l in docs.task_ids.timesheet_ids)" t-options="{'widget': 'duration', 'digital': True, 'unit': 'hour', 'round': 'minute'}"/></td>
+                                                </tr>
+<!--                                            </tr>-->
+<!--                                        </tr>-->
+<!--                                    </tr>-->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="oe_structure"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <report id="timesheet_reports"
+            model="project.project"
+            string="Project Timesheet"
+            report_type="qweb-pdf"
+            name="project_timesheet_time_control.report_timesheets"
+            file="report_timesheets"
+    />
+</odoo>

@@ -9,6 +9,7 @@
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
                 <field name="show_time_control" invisible="1"/>
+                <button name="action_timesheet_send" string="Send by Email" type="object"/>
                 <button name="button_start_work"
                         string="Start work"
                         type="object"
@@ -90,5 +91,38 @@
             </tree>
         </field>
     </record>
+
+
+
+    <record id="email_template_timesheet_report" model="mail.template">
+        <field name="name">Timesheet Report</field>
+        <field name="subject">Timesheet Report - ${object.partner_id.name}</field>
+        <field name="email_from">${user.email|safe}</field>
+        <field name="email_to">${object.partner_id.email|safe}</field>
+        <field name="model_id" ref="project_timesheet_time_control.model_project_project"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html"><![CDATA[
+<p>Hello ,
+
+<p>
+Please find the attached Timesheet for ${object.name}.</br>
+If you have any questions do not hesitate to contact us.
+</p>
+
+<br/><br/>
+<p>Regards,</br></p>
+HR Department,
+${object.company_id.name}.
+
+</p>
+]]>
+        </field>
+        <field name="report_template" ref="project_timesheet_time_control.timesheet_reports"/>
+         <field name="report_name">${(object.name or '').replace('/','_')}</field>
+<!--        <field name="report_name">${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>-->
+
+    </record>
+
+
 
 </odoo>

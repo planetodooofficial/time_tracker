@@ -13,6 +13,7 @@
         'views/account_analytic_line_view.xml',
         'views/project_project_view.xml',
         'views/project_task_view.xml',
+        'views/report_project_timesheet.xml',
         'wizards/hr_timesheet_switch_view.xml',
     ],
     'installable': True,

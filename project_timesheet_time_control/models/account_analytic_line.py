@@ -18,6 +18,17 @@ class AccountAnalyticLine(models.Model):
     )
     notes=fields.Text("Extra Notes")
 
+    # current_time=fields.Many2one('hr.timesheet.switch', "Current Time")
+    running_time=fields.Float('Running Time',compute='_compute_running_timer_duration')
+
+    @api.depends("date_time")
+    def _compute_running_timer_duration(self):
+        """Compute duration of running timer when stopped."""
+        for one in self:
+            curr_id = self.env['hr.timesheet.switch'].search([('running_timer_ids', '=', one.id)])
+            one.running_time = one._duration(curr_id.date_time, one.date_time)
+
+
     @api.model
     def _eval_date(self, vals):
         if vals.get('date_time'):
