@@ -5,7 +5,7 @@ from odoo import api, models
 class ProjectProject(models.Model):
     _name = "project.project"
     _inherit = ["project.project", "hr.timesheet.time_control.mixin",'portal.mixin',
-                'mail.thread', 'mail.activity.mixin', 'utm.mixin']
+                'mail.thread', 'mail.activity.mixin']
 
     @api.model
     def _relation_with_timesheet_line(self):
