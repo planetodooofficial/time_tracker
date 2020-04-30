@@ -118,8 +118,8 @@ ${object.company_id.name}.
 ]]>
         </field>
         <field name="report_template" ref="project_timesheet_time_control.timesheet_reports"/>
-         <field name="report_name">${(object.name or '').replace('/','_')}</field>
-<!--        <field name="report_name">${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>-->
+        <field name="report_name">${(object.name or '').replace('/','_')}</field>
+        <!--        <field name="report_name">${(object.name or '').replace('/','_')}${object.state == 'draft' and '_draft' or ''}</field>-->
 
     </record>
 
