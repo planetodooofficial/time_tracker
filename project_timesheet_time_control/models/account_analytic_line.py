@@ -11,6 +11,7 @@ class AccountAnalyticLine(models.Model):
         default=fields.Datetime.now,
         copy=False,
     )
+    date_stop=fields.Datetime("End Time")
     show_time_control = fields.Selection(
         selection=[("resume", "Resume"), ("stop", "Stop")],
         compute="_compute_show_time_control",
@@ -81,6 +82,7 @@ class AccountAnalyticLine(models.Model):
                       "Refresh the page and check again.") %
                     line.id
                 )
+            line.date_stop=end
             line.unit_amount = line._duration(line.date_time, end)
             view = self.env.ref('project_timesheet_time_control.timesheet_wizard_form_view')
             ctx = dict(self.env.context or {})
