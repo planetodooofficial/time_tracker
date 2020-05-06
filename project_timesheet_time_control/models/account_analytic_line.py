@@ -18,6 +18,9 @@ class AccountAnalyticLine(models.Model):
         help="Indicate which time control button to show, if any.",
     )
     notes=fields.Text("Extra Notes")
+    date_start = fields.Datetime(string='Start Date')
+    date_end = fields.Datetime(string='End Date', readonly=1)
+    timer_duration = fields.Float(invisible=1, string='Time Duration (Minutes)')
 
     @api.model
     def _eval_date(self, vals):
@@ -83,6 +86,8 @@ class AccountAnalyticLine(models.Model):
                     line.id
                 )
             line.date_stop=end
+            line.task_id.write({'task_timer': False})
+            line.task_id.write({'is_user_working': False})
             line.unit_amount = line._duration(line.date_time, end)
             view = self.env.ref('project_timesheet_time_control.timesheet_wizard_form_view')
             ctx = dict(self.env.context or {})
