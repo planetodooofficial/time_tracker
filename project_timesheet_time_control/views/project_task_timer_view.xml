@@ -7,9 +7,9 @@
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="after">
-                    <label for="task_timer"/>
+                    <label for="task_timer" invisible="1"/>
                     <div class="o_row" style="display: inline-block;">
-                        <field name="task_timer" widget="boolean_toggle"/>
+                        <field name="task_timer" widget="boolean_toggle" invisible="1"/>
                     </div>
                 </xpath>
                 <xpath expr="//div[@name='button_box']" position="inside">
@@ -27,12 +27,12 @@
             <field name="inherit_id" ref="project_timesheet_time_control.project_task_timer_inherit_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='timesheet_ids']/tree/field[@name='unit_amount']" position="before">
-                    <field name="date_start" required="1"/>
-                    <field name="date_end"/>
+                    <field name="date_start" invisible="1"/>
+                    <field name="date_end" invisible="1"/>
                     <field name="timer_duration" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='progress']" position="after">
-                    <field name="is_user_working" invisible="0"/>
+                    <field name="is_user_working" invisible="1"/>
                     <label for="duration"/>
                     <div>
                         <button style="pointer-events: none;" class="oe_inline label label-default">

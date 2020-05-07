@@ -124,7 +124,7 @@
                 <form string="Save Activity">
                     <group>
                         <field name="note" required="1"/>
-                        <field name="time_id" invisible="0"/>
+                        <field name="time_id" invisible="0" String="Timesheet"/>
                     </group>
                     <footer>
                         <button name="set_activity" string="Save Notes" type="object" class="oe_highlight"/>

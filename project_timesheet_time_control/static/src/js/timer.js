@@ -59,6 +59,10 @@ var TimeCounter  = AbstractField.extend({
                 self._startTimeCounter();
             }, 1000);
         }
+//        else if(this.record.data.reset_time){
+//        self.duration=0;
+//        clearTimeout(this.timer);
+//        }
          else {
             clearTimeout(this.timer);
         }
